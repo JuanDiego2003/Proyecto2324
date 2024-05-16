@@ -34,9 +34,22 @@ public class Jugador : MonoBehaviour
         if (ObjetoTocdo.gameObject.CompareTag("Enemigo"))
         {
             ObjetoTocdo.gameObject.GetComponent<Enemy>().DestruirEnemigo();
-            if (_numEscudos != 0)
+            _numEscudos--;
+            if (_numEscudos < 0)
             {
-                _numEscudos--;
+                GameObject.Find("GameOver").GetComponent<TMPro.TextMeshProUGUI>().text = "GAME OVER";
+                GameObject.Find("Puntos").GetComponent<TMPro.TextMeshProUGUI>().text = "Cantidad de puntos \r\nobtenidos: " + _numMonedasTocadas;
+
+                GameObject.Find("GeneradorEnemys").GetComponent<GeneradorEnemys>().PararGen();
+                GameObject.Find("GeneradorMonedas").GetComponent<GeneradorMoneda>().PararGen();
+                GameObject.Find("GeneradorMonedas2").GetComponent<GeneradorMoneda>().PararGen();
+                gameObject.SetActive(false);
+                EliminarPArarGen();
+
+                
+            }
+            if (_numEscudos >= 0)
+            {
                 string TextEscudos = "Escudos: " + _numEscudos;
                 GameObject.Find("EscudoJugador").GetComponent<TMPro.TextMeshProUGUI>().text = TextEscudos;
             }
@@ -53,6 +66,28 @@ public class Jugador : MonoBehaviour
             GameObject.Find("EscudoJugador").GetComponent<TMPro.TextMeshProUGUI>().text = TextEscudos;
             string TextMonedasTocadas = "Monedas tocadas:  " + _numMonedasTocadas;
             GameObject.Find("MonedasTocadas").GetComponent<TMPro.TextMeshProUGUI>().text = TextMonedasTocadas;
+        }
+    }
+    public void EliminarPArarGen()
+    {
+        GameObject[] enemigos = GameObject.FindGameObjectsWithTag("Enemigo");
+        foreach (GameObject enemigo in enemigos)
+        {
+            Destroy(enemigo);
+        }
+        CancelInvoke("GeneraEnemy");
+
+        GameObject[] monedas = GameObject.FindGameObjectsWithTag("Moneda");
+        foreach (GameObject moneda in monedas)
+        {
+            Destroy(moneda);
+        }
+
+        // Detener la generación de monedas
+        GameObject[] generadoresMonedas = GameObject.FindGameObjectsWithTag("GeneradorMonedas");
+        foreach (GameObject generador in generadoresMonedas)
+        {
+            generador.GetComponent<GeneradorMoneda>().enabled = false;
         }
     }
 }

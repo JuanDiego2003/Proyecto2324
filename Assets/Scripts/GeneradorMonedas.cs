@@ -6,25 +6,26 @@ public class GeneradorMoneda : MonoBehaviour
 {
     public GameObject prefabMoneda;
     public float tiempoEntreGeneraciones = 4f;
-    private float tiempoUltimaGeneracion;
 
     void Start()
     {
-        tiempoUltimaGeneracion = Time.time;
-    }
-
-    void Update()
-    {
-        if (Time.time - tiempoUltimaGeneracion > tiempoEntreGeneraciones)
-        {
-            GenerarMoneda();
-            tiempoUltimaGeneracion = Time.time;
-        }
+        InvokeRepeating("GenerarMoneda", 1, tiempoEntreGeneraciones);
     }
 
     void GenerarMoneda()
     {
-        GameObject moneda = Instantiate(prefabMoneda);
-        moneda.transform.position = transform.position;
+            GameObject moneda = Instantiate(prefabMoneda);
+            moneda.transform.position = transform.position;
+    }
+
+    public void PararGen()
+    {
+        CancelInvoke("GenerarMoneda");
+    }
+    
+    // Update is called once per frame
+    void Update()
+    {
+
     }
 }

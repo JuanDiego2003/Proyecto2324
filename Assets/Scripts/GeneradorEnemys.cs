@@ -12,8 +12,15 @@ public class GeneradorEnemys : MonoBehaviour
     }
     private void GeneraEnemy()
     {
-        GameObject enemy = Instantiate(_prefabEnemy); 
-        enemy.transform.position = transform.position;
+
+        {
+            GameObject enemy = Instantiate(_prefabEnemy); 
+            enemy.transform.position = transform.position;
+        }
+    }
+    public void PararGen()
+    {
+        CancelInvoke("GeneraEnemy");
     }
 
     // Update is called once per frame
